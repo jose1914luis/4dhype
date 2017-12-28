@@ -21,8 +21,11 @@ export class ListPage {
         password: '',
         tt_spent: '',
         tt_visited: '',
-        avatar: ''
+        avatar: '',
+        access_token: '',
+        id: ''
     };
+       
     constructor(private alertCtrl: AlertController, private storage: Storage, private camera: Camera, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
 
         let self = this;
@@ -34,13 +37,12 @@ export class ListPage {
             self.user.email = val.verf_data.email;
             self.user.password = val.verf_data.password;
             self.user.avatar = val.verf_data.avatar;
-            self.mensaje += JSON.stringify(val.verf_data.avatar);
+            //self.mensaje += JSON.stringify(val.verf_data.avatar);
 
-            let auth = {
-                access_token: val.access_token,
-                id: val.verf_data.id
-            }
-            self.http.post(PROXY + '/view_user_space_log.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
+            self.user.access_token = val.access_token;
+            self.user.id =  val.verf_data.id;         
+            
+            self.http.post(PROXY + '/view_user_space_log.php', btoa(JSON.stringify(self.user)), {'Content-Type': 'application/json;charset=UTF-8'})
                 .then(data => {
 
 
@@ -53,14 +55,34 @@ export class ListPage {
                 })
                 .catch(error => {
 
-                    self.presentAlert('Error!', JSON.stringify(error));
-                    self.mensaje += JSON.stringify(error);
+                    self.presentAlert('Error!', JSON.stringify(error));                    
+                    self.cargar = false;
                 });
         });
     }
 
     save() {
 
+        let self = this;
+        self.http.post(PROXY + '/user_profile.php', self.user, {'Content-Type': 'application/json;charset=UTF-8'})
+            .then(data => {
+
+                self.cargar = false;
+                self.mensaje = JSON.stringify(data.data);
+                var val = JSON.parse(data.data);
+                if(val){
+                    self.presentAlert('Great!', 'Your profile was update');                
+                    
+                }else{
+                    self.presentAlert('Error!', "Your profile wasn't update" );                
+                }
+
+            })
+            .catch(error => {
+
+                self.presentAlert('Error!', JSON.stringify(error));                
+                self.cargar = false;
+            });
     }
 
     change_avatar() {

@@ -18,9 +18,9 @@
     <form *ngIf="!cargar" (ngSubmit)="save()">
 
         <div text-center>            
-            <img src="{{user.avatar}}" alt=""/>
+            <img  width="30%" src="{{user.avatar}}" alt=""/>
         </div>
-        <button color="dark" (click)="change_avatar()">Change avatar</button>
+        <button ion-button block color="dark" (click)="change_avatar()">Change avatar</button>
 
         <ion-list>                            
 
