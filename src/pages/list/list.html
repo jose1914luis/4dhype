@@ -1,23 +1,60 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>List</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>My profile</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+
+    <div>{{mensaje}}</div>
+
+    <div *ngIf="cargar" style="text-align: center">
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+
+    <form *ngIf="!cargar" (ngSubmit)="save()">
+
+        <div text-center>            
+            <img src="{{user.avatar}}" alt=""/>
+        </div>
+        <button color="dark" (click)="change_avatar()">Change avatar</button>
+
+        <ion-list>                            
+
+            <ion-item>
+                <ion-label color="primary" stacked>First Name</ion-label>
+                <ion-input type="text" [(ngModel)]="user.first_name" required name='first_name' ></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Last Name</ion-label>
+                <ion-input type="text"  [(ngModel)]="user.last_name" required name='last_name'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Email</ion-label>
+                <ion-input type="email" [(ngModel)]="user.email" required name='email'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Password</ion-label>
+                <ion-input type="password" [(ngModel)]="user.password" required name='password'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Statistics</ion-label>
+                <ion-input type="text" [(ngModel)]="user.last_name" required name='last_name'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Total Time Spent in Space</ion-label>
+                <ion-input type="text" [(ngModel)]="user.tt_spent" required name='tt_spent'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Total Orbs Visted</ion-label>
+                <ion-input type="text" [(ngModel)]="user.tt_visited" required name='tt_visited'></ion-input>
+            </ion-item>
+
+
+            <button ion-button block type="submit">SAVE</button>
+        </ion-list>
+    </form>
 </ion-content>

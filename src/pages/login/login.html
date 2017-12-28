@@ -1,18 +1,22 @@
 
 <ion-content padding>
 
-    <form (ngSubmit)="doLogin()">
+    <div>{{mensaje}}</div>
+    <div *ngIf="cargar" style="text-align: center">
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
 
-        <div>{{mensaje}}</div>
+    <form *ngIf="!cargar" (ngSubmit)="doLogin()">
+
+
         <div text-center>
-            <img src="/assets/imgs/logo.jpg" alt=""/>
+            <img src="assets/imgs/logo.jpg" alt=""/>
         </div>
-        <br>
-
+        <br>        
         <ion-list>
             <ion-item>
                 <ion-label color="primary" floating>Email</ion-label>
-                <ion-input type="email"  [(ngModel)]="loginData.username" required name='username'></ion-input>
+                <ion-input type="email"  [(ngModel)]="loginData.email" required name='email'></ion-input>
             </ion-item>
 
             <ion-item>

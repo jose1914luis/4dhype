@@ -1,13 +1,9 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, AlertController} from 'ionic-angular';
 import {HTTP} from '@ionic-native/http';
 import {PROXY} from '../../providers/constants/constants';
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import {PanelPage} from '../../pages/panel/panel';
+import {Storage} from '@ionic/storage';
 
 @Component({
     selector: 'page-login',
@@ -16,8 +12,9 @@ import {PROXY} from '../../providers/constants/constants';
 export class LoginPage {
 
     mensaje = '';
-    loginData = {username: 'simpleraison@googlemail.com', password: 'testtest123'}
-    constructor(private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
+    loginData = {email: 'simpleraison@googlemail.com', password: 'testtest123', "autoLogin": true};
+    cargar = false;
+    constructor(private alertCtrl: AlertController, private storage: Storage, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
     }
 
     ionViewDidLoad() {
@@ -27,25 +24,33 @@ export class LoginPage {
     doLogin() {
 
         let self = this;
-        let params = {
-            email: this.loginData.username,
-            password: this.loginData.password,
-        }
-        this.http.post(PROXY + 'rest_api/', params, {})
+        self.cargar = true;
+        this.http.setDataSerializer('json');
+        this.http.post(PROXY + '/index.php', btoa(JSON.stringify(self.loginData)), {'Content-Type': 'application/json;charset=UTF-8'})
             .then(data => {
-                self.mensaje += JSON.stringify(data);
-                console.log(data.status);
-                console.log(data.data); // data received by server
-                console.log(data.headers);
 
+                self.cargar = false;
+                var user = JSON.parse(data.data);
+                if (user.access_token != undefined && user.access_token != null && user.access_token != '') {
+                    self.storage.set('user', user);
+                    self.navCtrl.setRoot(PanelPage);
+                } else {
+                    self.presentAlert('Error!', 'Access Denied');
+                    self.cargar = false;
+                }
             })
             .catch(error => {
-                self.mensaje += JSON.stringify(error);
-                console.log(error.status);
-                console.log(error.error); // error message as string
-                console.log(error.headers);
-
+                self.presentAlert('Error!', JSON.stringify(error));
+                self.cargar = false;
             });
     }
 
+    presentAlert(titulo, texto) {
+        const alert = this.alertCtrl.create({
+            title: titulo,
+            subTitle: texto,
+            buttons: ['Ok']
+        });
+        alert.present();
+    }
 }
