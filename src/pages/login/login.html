@@ -1,0 +1,30 @@
+
+<ion-content padding>
+
+    <form (ngSubmit)="doLogin()">
+
+        <div>{{mensaje}}</div>
+        <div text-center>
+            <img src="/assets/imgs/logo.jpg" alt=""/>
+        </div>
+        <br>
+
+        <ion-list>
+            <ion-item>
+                <ion-label color="primary" floating>Email</ion-label>
+                <ion-input type="email"  [(ngModel)]="loginData.username" required name='username'></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label color="primary" floating>Password</ion-label>
+                <ion-input type="password" [(ngModel)]="loginData.password" required name='password'></ion-input>
+            </ion-item>
+
+        </ion-list>
+        <button ion-button block type="submit">LOGIN</button>
+        <br>
+        <div text-center>
+            <a href="#" (click)="crearCuenta()">FORGOT PASSWORD?</a>    
+        </div>
+    </form>
+</ion-content>

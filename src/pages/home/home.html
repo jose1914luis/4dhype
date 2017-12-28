@@ -1,18 +1,23 @@
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+    <div text-center>
+        <img src="/assets/imgs/logo.jpg" width="80%" alt="4DHYPE"/>
+    </div>
+    <br>
+    <div text-justify>
+        Welcome to 4D HYPE a new and innovate way to present information. 
+        This platform has been made for both publishers and users. 
+        Please note as this is a new platform we recommend all our users to 
+        spend around 40 minutes or so getting familiar with the website.
+        <br>
+        <br>
+        We want our users to have the best possible experience on 4D HYPE and we
+        pride ourselves on the quality of information we share. For this reason
+        the website is invite only. If you want to join to 4D HYPE community please
+        request an invite below or alternatively you can login.      
+    </div>
+    <br>
+    <br>
+    <button ion-button block color="light">REQUEST AN INVITE</button>    
+    <button ion-button block (click)="goToLogin()" >LOGIN HERE</button>
 </ion-content>
