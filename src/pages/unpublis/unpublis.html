@@ -14,24 +14,43 @@
         <ion-spinner icon="lines"></ion-spinner>
     </div>
 
-    <ion-list>
-        <ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+    <br>
+    <ion-segment [(ngModel)]="icons" color="primary">
+        <ion-segment-button icon-start value="send" (ionSelect)="changeColor('secondary')">
+            <ion-icon name="send"></ion-icon>Publish
+        </ion-segment-button>
+        <ion-segment-button icon-start value="create" (ionSelect)="changeColor('primary')">
+            <ion-icon name="create"></ion-icon>Edit
+        </ion-segment-button>
+        <ion-segment-button icon-start value="trash" (ionSelect)="changeColor('danger')">
+            <ion-icon name="trash"></ion-icon>Delete
+        </ion-segment-button>
+    </ion-segment>
+    <br>
+    
+    <ion-list>        
+        <ion-item *ngFor="let item of items">
 
-            <button color="secondary" outline ion-button  icon-only item-start (click)="buttonClick()">
-                <ion-icon name="send" ></ion-icon>
+            <button color="{{color}}" outline ion-button  icon-only item-start (click)="ejecute({{item}})">
+                <ion-icon name="{{icons}}" ></ion-icon>
             </button>
-            <button ion-button outline icon-only item-start (click)="buttonClick()">
+            <ion-label>
+                <h2><b>{{item.stack_title}}</b></h2>
+                <p>{{item.timestamp}}</p>
+            </ion-label>
+
+            <!--<button ion-button outline icon-only item-start (click)="buttonClick()">
                 <ion-icon name="create" ></ion-icon>
             </button>                                   
             <ion-label>
-                {{item.stack_title}}
+                <b>{{item.stack_title}}</b>
             </ion-label>
             <div item-content>
                {{item.timestamp}}
             </div>
             <button color="danger" icon-only ion-button outline item-end (click)="buttonClick()">
                 <ion-icon name="close" ></ion-icon>
-            </button>
+            </button>-->
         </ion-item>
     </ion-list>
 

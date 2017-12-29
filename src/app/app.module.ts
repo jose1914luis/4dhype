@@ -8,6 +8,7 @@ import {ListPage} from '../pages/list/list';
 import {LoginPage} from '../pages/login/login';
 import {PanelPage} from '../pages/panel/panel';
 import {UnpublisPage} from '../pages/unpublis/unpublis';
+import {StackPage} from '../pages/stack/stack';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -22,7 +23,8 @@ import {Camera} from '@ionic-native/camera';
         ListPage,
         LoginPage,
         PanelPage,
-        UnpublisPage
+        UnpublisPage,
+        StackPage
     ],
     imports: [
         BrowserModule,
@@ -36,7 +38,8 @@ import {Camera} from '@ionic-native/camera';
         ListPage,
         LoginPage,
         PanelPage,
-        UnpublisPage
+        UnpublisPage,
+        StackPage
     ],
     providers: [
         Camera,

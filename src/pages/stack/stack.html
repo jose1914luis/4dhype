@@ -1,0 +1,76 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Edit stack {{stack.stack_title}}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div>{{mensaje}}</div>
+    <div *ngIf="cargar" style="text-align: center">
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+
+    <form *ngIf="!cargar" (ngSubmit)="edit()">
+
+        <ion-list>
+            <ion-item>
+                <ion-label color="primary" floating>Main Stack Title</ion-label>
+                <ion-input type="text"  [(ngModel)]="stack.stack_title" required name='stack_title'></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label color="primary" floating>Select your Categories</ion-label>
+                <ion-input type="text" [(ngModel)]="stack.category" required name='category'></ion-input>
+            </ion-item>
+
+        </ion-list>
+        <br>
+        <h2>Lines</h2>
+
+        <ion-card color="secondary">
+            <ion-card-content>
+                let's add a line, if you want to add more 
+                lines just push Add Line
+            </ion-card-content>
+
+        </ion-card>
+        <ion-card color="dark">
+            <ion-card-content>
+                Tip: remember stack can be published with just 1 line or if
+                you prefer all 7 lines or anything in between. This is up to you.
+            </ion-card-content>
+        </ion-card>
+        <br>
+        <ion-list>
+            <h2>Line #1</h2>
+            <ion-item>
+                <ion-label color="primary" floating>stack line #1</ion-label>
+                <ion-input type="text"  ></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" stacked>Description</ion-label>
+                <ion-textarea rows="3"  placeholder="Enter Line Description"></ion-textarea>
+            </ion-item>
+        </ion-list>
+        <br>
+        <button ion-button block icon-start type="button">
+            <ion-icon name="add"></ion-icon> Add
+        </button>        
+
+        <br>
+        <ion-segment [(ngModel)]="event" color="primary">
+            <ion-segment-button icon-start value="preview" (ionSelect)="ejecute()">
+                <ion-icon name="eye"></ion-icon>Preview 
+            </ion-segment-button>
+            <ion-segment-button icon-start value="save" (ionSelect)="ejecute()">
+                <ion-icon name="cloud-done"></ion-icon>Save
+            </ion-segment-button>
+            <ion-segment-button icon-start value="publish" (ionSelect)="ejecute()">
+                <ion-icon name="send"></ion-icon>Publish
+            </ion-segment-button>
+        </ion-segment>
+    </form>
+</ion-content>
