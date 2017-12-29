@@ -10,7 +10,7 @@ import {Storage} from '@ionic/storage';
     templateUrl: 'unpublis.html',
 })
 export class UnpublisPage {
-    
+
     items = [];
     cargar = true;
     mensaje = '';
@@ -18,29 +18,33 @@ export class UnpublisPage {
     color = 'secondary';
     constructor(private alertCtrl: AlertController, private storage: Storage, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
 
-        this.items = [];        
-        
+    }
+
+    ionViewDidLoad() {
+
+        this.items = [];
+
         let self = this;
-        
+        self.cargar = true;
         this.storage.get('user').then((val) => {
 
             //self.mensaje += JSON.stringify(val);            
             let auth = {
-                created_by:val.verf_data.id, 
-                access_token:val.access_token,
-                status:"unpublished"
+                created_by: val.verf_data.id,
+                access_token: val.access_token,
+                status: "unpublished"
             };
             self.http.setDataSerializer('json');
             self.http.post(PROXY + '/unpublished_stacks.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
                 .then(data => {
                     self.cargar = false;
                     var stacks = JSON.parse(data.data);
-                    for (var key in stacks) {                        
+                    for (var key in stacks) {
                         self.items.push({
-                            stack_id:stacks[key].id,
-                            access_token:val.access_token,
+                            stack_id: stacks[key].id,
+                            access_token: val.access_token,
                             stack_title: stacks[key].stack_title,
-                            timestamp: new Date(stacks[key].timestamp).toDateString(),                            
+                            timestamp: new Date(stacks[key].timestamp).toDateString(),
                         });
                     }
                 })
@@ -49,7 +53,7 @@ export class UnpublisPage {
                     self.presentAlert('Error!', JSON.stringify(error));
                     self.cargar = false;
                 });
-        });        
+        });
     }
 
     presentAlert(titulo, texto) {
@@ -60,16 +64,63 @@ export class UnpublisPage {
         });
         alert.present();
     }
-    
-    changeColor(color){
-        this.color = color;        
+
+    changeColor(color) {
+        this.color = color;
     }
-    
-    
-    ejecute(item){
-        if(this.icons == 'create'){
-            this.navCtrl.push(StackPage, {item:item});
-        }        
+
+
+    ejecute(item) {
+
+        if (this.icons == 'create') {
+            this.navCtrl.push(StackPage, {item: item});
+        } else if (this.icons == 'trash') {
+        
+            let alert = this.alertCtrl.create({
+                title: 'Alert',
+                message: 'Are you sure you want to delete this stack and related files?',
+                buttons: [
+                    {
+                        text: 'No',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Cancel clicked');
+                        }
+                    },
+                    {
+                        text: 'Si',
+                        handler: () => {
+                            this.deleteStack(item);
+                        }
+                    }
+                ]
+            });
+            alert.present();
+        }
+    }
+
+    deleteStack(item) {
+
+        let self = this;
+        let auth = {
+            id: item.stack_id,
+            access_token: item.access_token,
+        };
+        self.http.setDataSerializer('json');
+        self.http.post(PROXY + '/delete_stack.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
+            .then(data => {
+                
+                var tmp = JSON.parse(data.data);
+                self.mensaje += tmp;
+                if (tmp[0] == true) {
+                    self.ionViewDidLoad();
+                }
+            })
+            .catch(error => {
+
+                self.presentAlert('Error!', JSON.stringify(error));
+                self.cargar = false;
+            });
     }
 
 }
