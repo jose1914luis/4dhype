@@ -87,7 +87,12 @@
     <allow-navigation href="http://192.168.1.19:8107" />
     <allow-navigation href="http://192.168.1.19:8108" />
     <allow-navigation href="http://192.168.1.19:8109" />
-    <engine name="browser" spec="5.0.3" />
-    <engine name="android" spec="~7.0.0" />
     <allow-navigation href="http://192.168.1.19:8100" />
+    <allow-navigation href="http://192.168.1.19:8105" />
+    <allow-navigation href="http://192.168.1.19:8106" />
+    <allow-navigation href="http://192.168.1.19:8101" />
+    <allow-navigation href="http://192.168.1.19:8102" />
+    <allow-navigation href="http://192.168.1.19:8103" />
+    <engine name="browser" spec="5.0.3" />
+    <engine name="android" spec="7.0.0" />
 </widget>

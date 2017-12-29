@@ -31,7 +31,7 @@
     <ion-list>        
         <ion-item *ngFor="let item of items">
 
-            <button color="{{color}}" outline ion-button  icon-only item-start (click)="ejecute({{item}})">
+            <button color="{{color}}" outline ion-button type="button"  icon-only item-start (click)="ejecute(item)">
                 <ion-icon name="{{icons}}" ></ion-icon>
             </button>
             <ion-label>

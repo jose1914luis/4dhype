@@ -9,33 +9,43 @@ import {PROXY} from '../../providers/constants/constants';
 })
 export class StackPage {
 
-    cargar = true;
+    cargar = false;
     mensaje = '';
     stack = {
-        category: '',
-        created_by: '',
-        description: '',
         id: '',
-        line_id: '',
         stack_title: '',
+        category: '',
+        total_hits: '',
+        created_by: '',
         status: '',
         timestamp: '',
+        line_id: '',                        
         title: '',
-        total_hits: ''
+        description: '',                        
     }
-    
+    lines = [];
+
     constructor(private alertCtrl: AlertController, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
-        
-        let self = this;        
+
+
+        let self = this;
         let auth = this.navParams.get('item');
-        self.mensaje += JSON.parse(auth);
-        
+        //add the firts line
+        this.lines.push({
+            id: '1',
+            title: '',
+            description: ''
+        });
+
+
+
         self.http.setDataSerializer('json');
-        self.http.post(PROXY + '/unpublished_stacks.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
+        self.http.post(PROXY + '/stack_lines.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
             .then(data => {
                 self.cargar = false;
-                self.mensaje += JSON.parse(data.data);
-                self.stack = JSON.parse(data.data);                
+                var tmp = JSON.parse(data.data);                
+                //self.mensaje += pru[0].id;
+                self.stack = tmp[0];//JSON.parse(data.data[0]);
             })
             .catch(error => {
 
@@ -51,6 +61,17 @@ export class StackPage {
             buttons: ['Ok']
         });
         alert.present();
+    }
+
+    addLine() {
+        let self = this;
+        if (this.lines.length < 8) {
+            this.lines.push({
+                id: self.lines.length + 1,
+                title: '',
+                description: ''
+            });
+        }
     }
 
 }

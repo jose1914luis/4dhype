@@ -37,7 +37,7 @@
             </ion-card-content>
 
         </ion-card>
-        <ion-card color="dark">
+        <ion-card color="light">
             <ion-card-content>
                 Tip: remember stack can be published with just 1 line or if
                 you prefer all 7 lines or anything in between. This is up to you.
@@ -45,32 +45,34 @@
         </ion-card>
         <br>
         <ion-list>
-            <h2>Line #1</h2>
-            <ion-item>
-                <ion-label color="primary" floating>stack line #1</ion-label>
-                <ion-input type="text"  ></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label color="primary" stacked>Description</ion-label>
-                <ion-textarea rows="3"  placeholder="Enter Line Description"></ion-textarea>
-            </ion-item>
+            <div *ngFor="let line of lines">
+                <h2>Line #{{line.id}}</h2>
+                <ion-item>
+                    <ion-label color="primary" floating>Stack Line #{{line.id}}</ion-label>
+                    <ion-input type="text" value='{{line.title}}'></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label color="primary" stacked>Description</ion-label>
+                    <ion-textarea rows="3"  placeholder="Enter Line Description">{{line.description}}</ion-textarea>
+                </ion-item>
+            </div>
         </ion-list>
         <br>
-        <button ion-button block icon-start type="button">
+        <button ion-button block icon-start type="button" (click)="addLine()">
             <ion-icon name="add"></ion-icon> Add
-        </button>        
-
-        <br>
-        <ion-segment [(ngModel)]="event" color="primary">
-            <ion-segment-button icon-start value="preview" (ionSelect)="ejecute()">
-                <ion-icon name="eye"></ion-icon>Preview 
-            </ion-segment-button>
-            <ion-segment-button icon-start value="save" (ionSelect)="ejecute()">
-                <ion-icon name="cloud-done"></ion-icon>Save
-            </ion-segment-button>
-            <ion-segment-button icon-start value="publish" (ionSelect)="ejecute()">
-                <ion-icon name="send"></ion-icon>Publish
-            </ion-segment-button>
-        </ion-segment>
+        </button>                
     </form>
+
+    <br>
+    <ion-segment [(ngModel)]="event" color="primary">
+        <ion-segment-button icon-start value="preview" (ionSelect)="ejecute()">
+            <ion-icon name="eye"></ion-icon>Preview 
+        </ion-segment-button>
+        <ion-segment-button icon-start value="save" (ionSelect)="ejecute()">
+            <ion-icon name="cloud-done"></ion-icon>Save
+        </ion-segment-button>
+        <ion-segment-button icon-start value="publish" (ionSelect)="ejecute()">
+            <ion-icon name="send"></ion-icon>Publish
+        </ion-segment-button>
+    </ion-segment>
 </ion-content>

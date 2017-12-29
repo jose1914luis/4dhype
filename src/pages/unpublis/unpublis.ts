@@ -11,7 +11,7 @@ import {Storage} from '@ionic/storage';
 })
 export class UnpublisPage {
     
-    items:any = [];
+    items = [];
     cargar = true;
     mensaje = '';
     icons = 'send';
@@ -31,7 +31,7 @@ export class UnpublisPage {
                 status:"unpublished"
             };
             self.http.setDataSerializer('json');
-            self.http.post(PROXY + '/stacks_lines.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
+            self.http.post(PROXY + '/unpublished_stacks.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
                 .then(data => {
                     self.cargar = false;
                     var stacks = JSON.parse(data.data);
@@ -62,11 +62,14 @@ export class UnpublisPage {
     }
     
     changeColor(color){
-        this.color = color;
+        this.color = color;        
     }
     
+    
     ejecute(item){
-        this.navCtrl.push(StackPage, {item:item});
+        if(this.icons == 'create'){
+            this.navCtrl.push(StackPage, {item:item});
+        }        
     }
 
 }
