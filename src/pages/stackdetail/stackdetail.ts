@@ -49,7 +49,7 @@ export class StackdetailPage {
                                 id: lines[key].id,
                                 title: lines[key].title,
                                 description: lines[key].description,
-                                timestamp: lines[key].timestamp,
+                                timestamp:  new Date(lines[key].timestamp).toDateString(),                               
                             });
                         }
 

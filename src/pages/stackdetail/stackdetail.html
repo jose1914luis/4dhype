@@ -2,13 +2,15 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-title>{{stack.stack_title}}</ion-title>
+        <ion-title>Stack Detail</ion-title>
     </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
+    
+    <h2>{{stack.stack_title}}</h2>
     <div>{{mensaje}}</div>
 
     <div *ngIf="cargar" style="text-align: center">
