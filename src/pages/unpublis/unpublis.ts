@@ -69,10 +69,10 @@ export class UnpublisPage {
         this.color = color;
     }
 
-
     ejecute(item) {
 
         if (this.icons == 'create') {
+            
             this.navCtrl.push(StackPage, {item: item});
         } else if (this.icons == 'trash') {
         
@@ -88,9 +88,31 @@ export class UnpublisPage {
                         }
                     },
                     {
-                        text: 'Si',
+                        text: 'Yes',
                         handler: () => {
                             this.deleteStack(item);
+                        }
+                    }
+                ]
+            });
+            alert.present();
+        }else if (this.icons == 'send'){
+        
+            let alert = this.alertCtrl.create({
+                title: 'Alert',
+                message: 'Are you sure you want to publish this stack and related files?',
+                buttons: [
+                    {
+                        text: 'No',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Cancel clicked');
+                        }
+                    },
+                    {
+                        text: 'Yes',
+                        handler: () => {
+                            this.publishStack(item);
                         }
                     }
                 ]
@@ -111,7 +133,31 @@ export class UnpublisPage {
             .then(data => {
                 
                 var tmp = JSON.parse(data.data);
-                self.mensaje += tmp;
+                
+                if (tmp[0] == true) {
+                    self.ionViewDidLoad();
+                }
+            })
+            .catch(error => {
+
+                self.presentAlert('Error!', JSON.stringify(error));
+                self.cargar = false;
+            });
+    }
+    
+    publishStack(item) {
+
+        let self = this;
+        let auth = {
+            id: item.stack_id,
+            access_token: item.access_token,
+        };
+        self.http.setDataSerializer('json');
+        self.http.post(PROXY + '/publish_stack.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
+            .then(data => {
+                
+                var tmp = JSON.parse(data.data);
+                
                 if (tmp[0] == true) {
                     self.ionViewDidLoad();
                 }

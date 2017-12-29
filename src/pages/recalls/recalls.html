@@ -1,18 +1,36 @@
-<!--
-  Generated template for the RecallsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>recalls</ion-title>
-  </ion-navbar>
-
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>My recalls</ion-title>
+    </ion-navbar>
 </ion-header>
 
+<ion-content>
+    <div>{{mensaje}}</div>
 
-<ion-content padding>
+    <div *ngIf="cargar" style="text-align: center">
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+
+    <br>
+    
+    <ion-list>        
+        <ion-item *ngFor="let item of items">
+            
+            <ion-label>
+                <h2><b><a (click)="loadRecall(item)">{{item.stack_title}}</a></b></h2>
+                <p>{{item.timestamp}}</p>
+            </ion-label>
+            <button color="danger" outline ion-button type="button"  icon-start item-end (click)="ejecute(item)">
+                <ion-icon name="trash" ></ion-icon>
+            </button>
+        </ion-item>
+    </ion-list>
+
+    <!--<div *ngIf="selectedItem" padding>
+        You navigated here from <b>{{selectedItem.title}}</b>
+    </div>-->
 
 </ion-content>

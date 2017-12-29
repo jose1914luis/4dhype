@@ -9,6 +9,8 @@ import {LoginPage} from '../pages/login/login';
 import {PanelPage} from '../pages/panel/panel';
 import {UnpublisPage} from '../pages/unpublis/unpublis';
 import {StackPage} from '../pages/stack/stack';
+import {StackdetailPage} from '../pages/stackdetail/stackdetail';
+import {RecallsPage} from '../pages/recalls/recalls';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -24,7 +26,9 @@ import {Camera} from '@ionic-native/camera';
         LoginPage,
         PanelPage,
         UnpublisPage,
-        StackPage
+        StackPage,
+        RecallsPage,
+        StackdetailPage
     ],
     imports: [
         BrowserModule,
@@ -39,7 +43,9 @@ import {Camera} from '@ionic-native/camera';
         LoginPage,
         PanelPage,
         UnpublisPage,
-        StackPage
+        StackPage,
+        RecallsPage,
+        StackdetailPage
     ],
     providers: [
         Camera,
