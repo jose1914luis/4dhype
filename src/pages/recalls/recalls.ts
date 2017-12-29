@@ -67,7 +67,7 @@ export class RecallsPage {
 
     changeColor(color) {
         this.color = color;
-    }        
+    }
 
     ejecute(item) {
 
@@ -119,7 +119,7 @@ export class RecallsPage {
 
     loadRecall(item) {
 
-        this.navCtrl.push(StackdetailPage, item);
+        this.navCtrl.push(StackdetailPage, {item: item});
     }
 
 }
