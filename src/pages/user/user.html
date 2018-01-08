@@ -25,28 +25,24 @@
         <ion-list>
             <ion-item>
                 <ion-label color="primary" floating>First Name</ion-label>
-                <ion-input type="text"  [(ngModel)]="user.first_name" required name='first_name'></ion-input>
+                <ion-input type="text"  [(ngModel)]="user.first_name" readonly="true" name='first_name'></ion-input>
             </ion-item>
 
             <ion-item>
                 <ion-label color="primary" floating>Last Name</ion-label>
-                <ion-input type="text" [(ngModel)]="user.last_name" required name='last_name'></ion-input>
+                <ion-input type="text" [(ngModel)]="user.last_name" [readonly]="true" name='last_name'></ion-input>
             </ion-item>
             
              <ion-item>
                 <ion-label color="primary" floating>Email</ion-label>
-                <ion-input type="email"  [(ngModel)]="user.email" required name='email'></ion-input>
+                <ion-input type="email"  [(ngModel)]="user.email" [readonly]="true" name='email'></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label color="primary" floating>User Name</ion-label>
-                <ion-input type="text" [(ngModel)]="user.username" required name='username'></ion-input>
+                <ion-input type="text" [(ngModel)]="user.username" [readonly]="true" name='username'></ion-input>
             </ion-item>
 
         </ion-list>
-        <button ion-button block type="submit">Login</button>
-        <br>
-        <div text-center>
-            <a href="#" (click)="crearCuenta()">Forgot Password?</a>    
-        </div>
+
     </form>
 </ion-content>

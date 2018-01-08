@@ -29,7 +29,7 @@ export class UserPage {
                 id: val.verf_data.id,
                 access_token: val.access_token
             };
-            self.http.post(PROXY + '/view_users_browsed_with.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+            self.http.post(PROXY + '/view_user.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
                 data => {//
                     self.cargar = false;
                     self.user = data;

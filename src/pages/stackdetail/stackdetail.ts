@@ -50,11 +50,11 @@ export class StackdetailPage {
                             description: lines[key].description,
                             timestamp:  new Date(lines[key].timestamp).toDateString(),   
                             clase: 'stack_full',
-                            px:a+'px'
+                            px:a+'px'//{{line.px}}
                         });
                         a = a +40;
                     }
-                    while(self.lines.length < 8){
+                    while(self.lines.length < 7){
                         self.lines.push({title: '', timestamp: '', description: '', clase: 'stack_none', px:a+'px'});
                         a = a +40;
                     }                    
