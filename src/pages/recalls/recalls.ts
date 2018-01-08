@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {HTTP} from '@ionic-native/http';
+import {Http} from '@angular/http';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 import {PROXY} from '../../providers/constants/constants';
 import {Storage} from '@ionic/storage';
 import {StackdetailPage} from '../../pages/stackdetail/stackdetail';
@@ -16,7 +18,7 @@ export class RecallsPage {
     mensaje = '';
     icons = 'send';
     color = 'secondary';
-    constructor(private alertCtrl: AlertController, private storage: Storage, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
+    constructor(private alertCtrl: AlertController, private storage: Storage, private http: Http, public navCtrl: NavController, public navParams: NavParams) {
 
     }
 
@@ -33,11 +35,10 @@ export class RecallsPage {
                 id: val.verf_data.id,
                 access_token: val.access_token
             };
-            self.http.setDataSerializer('json');
-            self.http.post(PROXY + '/view_recalls.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-                .then(data => {
+            self.http.post(PROXY + '/view_recalls.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+                data => {//
                     self.cargar = false;
-                    var recalls = JSON.parse(data.data);
+                    var recalls = data;
                     for (var key in recalls) {
                         self.items.push({
                             recall_id: recalls[key].id,
@@ -47,12 +48,12 @@ export class RecallsPage {
                             timestamp: new Date(recalls[key].timestamp).toDateString(),
                         });
                     }
-                })
-                .catch(error => {
-
-                    self.presentAlert('Error!', JSON.stringify(error));
+                },
+                err => {
+                    self.presentAlert('Error!', JSON.stringify(err));
                     self.cargar = false;
-                });
+                }
+            );            
         });
     }
 
@@ -71,21 +72,29 @@ export class RecallsPage {
 
     ejecute(item) {
 
+        let self = this;
         let alert = this.alertCtrl.create({
-            title: 'Alert',
-            message: 'Are you sure you want to delete this recall and related files?',
+            cssClass: 'custom-alert',
+            title: item.stack_title,
+            message: 'What do you want to do?',
             buttons: [
+                
                 {
-                    text: 'No',
-                    role: 'cancel',
+                    text: 'View',
                     handler: () => {
-                        console.log('Cancel clicked');
+                        self.loadRecall(item);
                     }
                 },
                 {
-                    text: 'Yes',
+                    text: 'Delete',
                     handler: () => {
-                        this.deleteStack(item);
+                        self.deleteStack(item);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
                     }
                 }
             ]
@@ -100,21 +109,19 @@ export class RecallsPage {
             id: item.recall_id,
             access_token: item.access_token,
         };
-        self.http.setDataSerializer('json');
-        self.http.post(PROXY + '/delete_recall.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-            .then(data => {
+        self.http.post(PROXY + '/delete_recall.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+                data => {//
+                    var tmp = data;
 
-                var tmp = JSON.parse(data.data);
-
-                if (tmp[0] == true) {
-                    self.ionViewDidLoad();
+                    if (tmp[0] == true) {
+                        self.ionViewDidLoad();
+                    }
+                },
+                err => {
+                    self.presentAlert('Error!', JSON.stringify(err));
+                    self.cargar = false;
                 }
-            })
-            .catch(error => {
-
-                self.presentAlert('Error!', JSON.stringify(error));
-                self.cargar = false;
-            });
+            );
     }
 
     loadRecall(item) {

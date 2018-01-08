@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {HTTP} from '@ionic-native/http';
+import {Http} from '@angular/http';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 import {PROXY} from '../../providers/constants/constants';
 import {Storage} from '@ionic/storage';
 import {Camera, CameraOptions} from '@ionic-native/camera';
@@ -25,11 +27,10 @@ export class ListPage {
         access_token: '',
         id: ''
     };
-       
-    constructor(private alertCtrl: AlertController, private storage: Storage, private camera: Camera, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
+
+    constructor(private alertCtrl: AlertController, private storage: Storage, private camera: Camera, private http: Http, public navCtrl: NavController, public navParams: NavParams) {
 
         let self = this;
-        this.http.setDataSerializer('json');
         this.storage.get('user').then((val) => {
 
             self.user.first_name = val.verf_data.first_name;
@@ -40,49 +41,42 @@ export class ListPage {
             //self.mensaje += JSON.stringify(val.verf_data.avatar);
 
             self.user.access_token = val.access_token;
-            self.user.id =  val.verf_data.id;         
-            
-            self.http.post(PROXY + '/view_user_space_log.php', btoa(JSON.stringify(self.user)), {'Content-Type': 'application/json;charset=UTF-8'})
-                .then(data => {
+            self.user.id = val.verf_data.id;
 
-
+            self.http.post(PROXY + '/view_user_space_log.php', btoa(JSON.stringify(self.user))).map(res => res.json()).subscribe(
+                data => {
                     self.cargar = false;
-                    var time = JSON.parse(data.data);
+                    var time = data;
 
                     self.user.tt_visited = time.tt_visited;
                     self.user.tt_spent = time.tt_spent;
-
-                })
-                .catch(error => {
-
-                    self.presentAlert('Error!', JSON.stringify(error));                    
+                },
+                err => {
+                    self.presentAlert('Error!', JSON.stringify(err));
                     self.cargar = false;
-                });
+                }
+            );
         });
     }
 
     save() {
-
         let self = this;
-        self.http.post(PROXY + '/user_profile.php', self.user, {'Content-Type': 'application/json;charset=UTF-8'})
-            .then(data => {
-
+        self.http.post(PROXY + '/user_profile.php', self.user).map(res => res.json()).subscribe(
+            data => {
                 self.cargar = false;
-                self.mensaje = JSON.stringify(data.data);
-                var val = JSON.parse(data.data);
-                if(val){
-                    self.presentAlert('Great!', 'Your profile was update');                
-                    
-                }else{
-                    self.presentAlert('Error!', "Your profile wasn't update" );                
+                var val = data;
+                if (val) {
+                    self.presentAlert('Great!', 'Your profile was update');
+
+                } else {
+                    self.presentAlert('Error!', "Your profile wasn't update");
                 }
-
-            })
-            .catch(error => {
-
-                self.presentAlert('Error!', JSON.stringify(error));                
+            },
+            err => {
+                self.presentAlert('Error!', JSON.stringify(err));
                 self.cargar = false;
-            });
+            }
+        );
     }
 
     change_avatar() {

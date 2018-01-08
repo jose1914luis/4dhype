@@ -17,12 +17,14 @@
 
     <form *ngIf="!cargar" (ngSubmit)="save()">
 
-        <div text-center>            
-            <img  width="30%" src="{{user.avatar}}" alt=""/>
-        </div>
-        <button ion-button block color="dark" (click)="change_avatar()">Change avatar</button>
 
-        <ion-list>                            
+        <ion-fab center>
+            <button ion-fab color="light" (click)="change_avatar"><img  src="{{user.avatar}}" alt=""/></button>
+        </ion-fab>
+
+        <br><br>
+        <br><br>
+        <ion-list>
 
             <ion-item>
                 <ion-label color="primary" stacked>First Name</ion-label>

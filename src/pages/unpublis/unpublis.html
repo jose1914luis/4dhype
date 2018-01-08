@@ -15,47 +15,34 @@
     </div>
 
     <br>
-    <ion-segment [(ngModel)]="icons" color="primary">
-        <ion-segment-button icon-start value="send" (ionSelect)="changeColor('secondary')">
-            <ion-icon name="send"></ion-icon>Publish
-        </ion-segment-button>
-        <ion-segment-button icon-start value="create" (ionSelect)="changeColor('primary')">
-            <ion-icon name="create"></ion-icon>Edit
-        </ion-segment-button>
-        <ion-segment-button icon-start value="trash" (ionSelect)="changeColor('danger')">
-            <ion-icon name="trash"></ion-icon>Delete
-        </ion-segment-button>
-    </ion-segment>
-    <br>
     
-    <ion-list>        
-        <ion-item *ngFor="let item of items">
 
-            <button color="{{color}}" outline ion-button type="button"  icon-only item-start (click)="ejecute(item)">
-                <ion-icon name="{{icons}}" ></ion-icon>
-            </button>
-            <ion-label>
-                <h2><b>{{item.stack_title}}</b></h2>
-                <p>{{item.timestamp}}</p>
-            </ion-label>
-
-            <!--<button ion-button outline icon-only item-start (click)="buttonClick()">
-                <ion-icon name="create" ></ion-icon>
-            </button>                                   
-            <ion-label>
-                <b>{{item.stack_title}}</b>
-            </ion-label>
-            <div item-content>
-               {{item.timestamp}}
-            </div>
-            <button color="danger" icon-only ion-button outline item-end (click)="buttonClick()">
-                <ion-icon name="close" ></ion-icon>
-            </button>-->
-        </ion-item>
-    </ion-list>
-
-    <!--<div *ngIf="selectedItem" padding>
-        You navigated here from <b>{{selectedItem.title}}</b>
-    </div>-->
+    <ion-grid>      
+      <ion-row style='background: gray;border: think solid black;'>
+        <ion-col col-3>
+            <h2><b>S/No.</b></h2>
+        </ion-col>
+        <ion-col col-6>
+            <h2><b>Stack Title</b></h2>
+            <p><b>Date Added</b></p>
+        </ion-col>
+        <ion-col col-3>
+          <h2><b>Lines</b></h2>
+        </ion-col>
+       </ion-row>
+       <ion-row *ngFor="let item of items; let i = index" (click)="ejecute(item)">
+        <ion-col col-3>
+            <h2>{{i+1}}</h2>
+        </ion-col>
+        <ion-col col-6>
+            <h2>{{item.stack_title}}</h2>
+            <p>{{item.timestamp}}</p>
+        </ion-col>
+         <ion-col col-3>
+          <h2>0</h2>
+        </ion-col>
+       </ion-row>
+    </ion-grid>
+        
 
 </ion-content>

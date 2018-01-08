@@ -8,25 +8,29 @@
 </ion-header>
 
 
-<ion-content>
-    
+<ion-content padding>
+
     <h2>{{stack.stack_title}}</h2>
     <div>{{mensaje}}</div>
 
-    <div *ngIf="cargar" style="text-align: center">
+    <div *ngIf="cargar" text-center>
         <ion-spinner icon="lines"></ion-spinner>
     </div>
 
+    <div *ngFor="let line of lines">
+        <div class="{{line.clase}}" [style.top]="line.px"> {{line.px}}</div>
+    </div>  
+    <div style="height: 350px"></div>
+    <div text-center >
+        <button color="light" ion-button type="button" (click)="collapse()">
+            Collapse
+        </button>
+    </div> 
     <br>
-
-    <ion-list>
-        <div *ngFor="let line of lines">
-            <ion-item>
-                <button ion-button full icon-start type="button" (click)="openLine(line)">
-                    {{line.title}}
-                </button>
-            </ion-item>
-        </div>
-    </ion-list>
+    <div text-center >
+        <button color="secondary"  ion-button type="button" (click)="goToOrbs()">
+            Back to Orbs
+        </button>
+    </div>
 
 </ion-content>

@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {HTTP} from '@ionic-native/http';
+import {Http} from '@angular/http';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 import {PROXY} from '../../providers/constants/constants';
 
 @Component({
@@ -25,7 +27,7 @@ export class StackPage {
     }
     lines = [];
 
-    constructor(private alertCtrl: AlertController, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
+    constructor(private alertCtrl: AlertController, private http: Http, public navCtrl: NavController, public navParams: NavParams) {
 
 
         let self = this;
@@ -39,19 +41,18 @@ export class StackPage {
 
 
 
-        self.http.setDataSerializer('json');
-        self.http.post(PROXY + '/stack_lines.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-            .then(data => {
-                self.cargar = false;
-                var tmp = JSON.parse(data.data);                
-                //self.mensaje += pru[0].id;
-                self.stack = tmp[0];//JSON.parse(data.data[0]);
-            })
-            .catch(error => {
-
-                self.presentAlert('Error!', JSON.stringify(error));
-                self.cargar = false;
-            });
+        self.http.post(PROXY + '/stack_lines.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+                data => {//
+                    self.cargar = false;
+                    var tmp = data;                
+                    //self.mensaje += pru[0].id;
+                    self.stack = tmp[0];//JSON.parse(data.data[0]);
+                },
+                err => {
+                    self.presentAlert('Error!', JSON.stringify(err));
+                    self.cargar = false;
+                }
+            );
     }
 
     presentAlert(titulo, texto) {

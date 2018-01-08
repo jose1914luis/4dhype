@@ -9,7 +9,8 @@ import {LoginPage} from '../../pages/login/login';
 export class HomePage {
 
   constructor(public navCtrl: NavController) {
-
+    
+      this.navCtrl.setRoot(LoginPage);
   }
   
   goToLogin(){

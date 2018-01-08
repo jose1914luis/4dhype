@@ -17,5 +17,5 @@
 
     <h2>{{line.title}}</h2>
     <p>Posted on {{line.timestamp}}</p>
-    <div>{{line.description}}</div>
+    <div [innerHtml]="line.description"></div>
 </ion-content>

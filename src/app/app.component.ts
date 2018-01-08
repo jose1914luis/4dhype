@@ -10,6 +10,10 @@ import {ListPage} from '../pages/list/list';
 import {PanelPage} from '../pages/panel/panel';
 import {RecallsPage} from '../pages/recalls/recalls';
 
+import {OrbsPage} from '../pages/orbs/orbs';
+//import * as textAgular from 'textangular';
+
+
 @Component({
     templateUrl: 'app.html'
 })
@@ -17,6 +21,7 @@ export class MyApp {
     @ViewChild(Nav) nav: Nav;
 
     rootPage: any = HomePage;
+    //rootPage: any = OrbsPage;
 
     pages: Array<{title: string, component: any}>;
 
@@ -25,10 +30,10 @@ export class MyApp {
 
         // used for an example of ngFor and navigation
         this.pages = [
+            {title: 'Home', component: PanelPage},
             {title: 'My Profile', component: ListPage},            
             {title: 'Unpublished Stacks', component: UnpublisPage},
-            {title: 'My Recalls', component: RecallsPage},
-            {title: 'Panel', component: PanelPage},
+            {title: 'My Recalls', component: RecallsPage},            
             {title: 'Logout', component: LoginPage}
         ];
 

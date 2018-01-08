@@ -11,13 +11,20 @@ import {UnpublisPage} from '../pages/unpublis/unpublis';
 import {StackPage} from '../pages/stack/stack';
 import {StackdetailPage} from '../pages/stackdetail/stackdetail';
 import {LinedetailPage} from '../pages/linedetail/linedetail';
+import {FriendPage} from '../pages/friend/friend';
 import {RecallsPage} from '../pages/recalls/recalls';
+import {OrbsPage} from '../pages/orbs/orbs';
+import {Wizard1Page} from '../pages/wizard1/wizard1';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {HTTP} from '@ionic-native/http';
+import { HttpModule } from '@angular/http';
 import {IonicStorageModule} from '@ionic/storage';
 import {Camera} from '@ionic-native/camera';
+import { SceneGraph } from '../components/scenegraph/scenegraph';
+
+
 
 @NgModule({
     declarations: [
@@ -30,9 +37,14 @@ import {Camera} from '@ionic-native/camera';
         StackPage,
         RecallsPage,
         StackdetailPage,
-        LinedetailPage
+        LinedetailPage,
+        FriendPage,
+        OrbsPage,
+        Wizard1Page,
+        SceneGraph
     ],
     imports: [
+        HttpModule,
         BrowserModule,
         IonicModule.forRoot(MyApp),
         IonicStorageModule.forRoot()
@@ -48,7 +60,10 @@ import {Camera} from '@ionic-native/camera';
         StackPage,
         RecallsPage,
         StackdetailPage,
-        LinedetailPage
+        LinedetailPage,
+        FriendPage,
+        OrbsPage,
+        Wizard1Page
     ],
     providers: [
         Camera,

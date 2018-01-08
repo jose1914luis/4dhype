@@ -15,22 +15,26 @@
     </div>
 
     <br>
-    
-    <ion-list>        
-        <ion-item *ngFor="let item of items">
-            
-            <ion-label>
-                <h2><b><a (click)="loadRecall(item)">{{item.stack_title}}</a></b></h2>
-                <p>{{item.timestamp}}</p>
-            </ion-label>
-            <button color="danger" outline ion-button type="button"  icon-start item-end (click)="ejecute(item)">
-                <ion-icon name="trash" ></ion-icon>
-            </button>
-        </ion-item>
-    </ion-list>
+    <ion-grid>      
+      <ion-row style='background: gray;border: think solid black;'>
+        <ion-col col-3>
+            <h2><b>S/No.</b></h2>
+        </ion-col>
+        <ion-col col-8>
+                <h2><b>Title</b></h2>
+                <p><b>Date Added</b></p>
+        </ion-col>        
+       </ion-row>
+       <ion-row *ngFor="let item of items; let i = index" (click)="ejecute(item)">
+        <ion-col col-3>
+            <h2>{{i+1}}</h2>
+        </ion-col>
+        <ion-col col-8>
+            <h2>{{item.stack_title}}</h2>
+            <p>{{item.timestamp}}</p>
+        </ion-col>       
+       </ion-row>
+    </ion-grid>
 
-    <!--<div *ngIf="selectedItem" padding>
-        You navigated here from <b>{{selectedItem.title}}</b>
-    </div>-->
 
 </ion-content>

@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {HTTP} from '@ionic-native/http';
+import {Http} from '@angular/http';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 import {PROXY} from '../../providers/constants/constants';
 import {StackPage} from '../../pages/stack/stack';
 import {Storage} from '@ionic/storage';
@@ -14,9 +16,7 @@ export class UnpublisPage {
     items = [];
     cargar = true;
     mensaje = '';
-    icons = 'send';
-    color = 'secondary';
-    constructor(private alertCtrl: AlertController, private storage: Storage, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
+    constructor(private alertCtrl: AlertController, private storage: Storage, private http: Http, public navCtrl: NavController, public navParams: NavParams) {
 
     }
 
@@ -34,11 +34,11 @@ export class UnpublisPage {
                 access_token: val.access_token,
                 status: "unpublished"
             };
-            self.http.setDataSerializer('json');
-            self.http.post(PROXY + '/unpublished_stacks.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-                .then(data => {
+
+            this.http.post(PROXY + '/unpublished_stacks.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+                data => {//
                     self.cargar = false;
-                    var stacks = JSON.parse(data.data);
+                    var stacks = data;
                     for (var key in stacks) {
                         self.items.push({
                             stack_id: stacks[key].id,
@@ -47,12 +47,14 @@ export class UnpublisPage {
                             timestamp: new Date(stacks[key].timestamp).toDateString(),
                         });
                     }
-                })
-                .catch(error => {
-
-                    self.presentAlert('Error!', JSON.stringify(error));
+                },
+                err => {
+                    self.presentAlert('Error!', JSON.stringify(err));
                     self.cargar = false;
-                });
+                }
+            );
+
+
         });
     }
 
@@ -65,60 +67,40 @@ export class UnpublisPage {
         alert.present();
     }
 
-    changeColor(color) {
-        this.color = color;
-    }
-
     ejecute(item) {
 
-        if (this.icons == 'create') {
-            
-            this.navCtrl.push(StackPage, {item: item});
-        } else if (this.icons == 'trash') {
-        
-            let alert = this.alertCtrl.create({
-                title: 'Alert',
-                message: 'Are you sure you want to delete this stack and related files?',
-                buttons: [
-                    {
-                        text: 'No',
-                        role: 'cancel',
-                        handler: () => {
-                            console.log('Cancel clicked');
-                        }
-                    },
-                    {
-                        text: 'Yes',
-                        handler: () => {
-                            this.deleteStack(item);
-                        }
+        let alert = this.alertCtrl.create({
+            cssClass: 'custom-alert',
+            title: item.stack_title,
+            message: 'What do you want to do?',
+            buttons: [
+                {
+                    text: 'Publish',                    
+                    handler: () => {
+                        this.publishStack(item);
                     }
-                ]
-            });
-            alert.present();
-        }else if (this.icons == 'send'){
-        
-            let alert = this.alertCtrl.create({
-                title: 'Alert',
-                message: 'Are you sure you want to publish this stack and related files?',
-                buttons: [
-                    {
-                        text: 'No',
-                        role: 'cancel',
-                        handler: () => {
-                            console.log('Cancel clicked');
-                        }
-                    },
-                    {
-                        text: 'Yes',
-                        handler: () => {
-                            this.publishStack(item);
-                        }
+                },
+                {
+                    text: 'Edit',
+                    handler: () => {
+                        this.navCtrl.push(StackPage, {item: item});
                     }
-                ]
-            });
-            alert.present();
-        }
+                },
+                {
+                    text: 'Delete',
+                    handler: () => {
+                        this.deleteStack(item);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    handler: () => {
+                        console.log('cancel');
+                    }
+                }
+            ]
+        });
+        alert.present();
     }
 
     deleteStack(item) {
@@ -128,23 +110,22 @@ export class UnpublisPage {
             id: item.stack_id,
             access_token: item.access_token,
         };
-        self.http.setDataSerializer('json');
-        self.http.post(PROXY + '/delete_stack.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-            .then(data => {
-                
-                var tmp = JSON.parse(data.data);
-                
+
+        this.http.post(PROXY + '/delete_stack.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+            data => {//
+                var tmp = data;
+
                 if (tmp[0] == true) {
                     self.ionViewDidLoad();
                 }
-            })
-            .catch(error => {
-
-                self.presentAlert('Error!', JSON.stringify(error));
+            },
+            err => {
+                self.presentAlert('Error!', JSON.stringify(err));
                 self.cargar = false;
-            });
+            }
+        );    
     }
-    
+
     publishStack(item) {
 
         let self = this;
@@ -152,21 +133,20 @@ export class UnpublisPage {
             id: item.stack_id,
             access_token: item.access_token,
         };
-        self.http.setDataSerializer('json');
-        self.http.post(PROXY + '/publish_stack.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-            .then(data => {
-                
-                var tmp = JSON.parse(data.data);
-                
+        
+        this.http.post(PROXY + '/publish_stack.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+            data => {//
+                var tmp = data;
+
                 if (tmp[0] == true) {
                     self.ionViewDidLoad();
                 }
-            })
-            .catch(error => {
-
-                self.presentAlert('Error!', JSON.stringify(error));
+            },
+            err => {
+                self.presentAlert('Error!', JSON.stringify(err));
                 self.cargar = false;
-            });
+            }
+        );              
     }
 
 }

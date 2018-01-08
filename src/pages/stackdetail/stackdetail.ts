@@ -1,8 +1,11 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {HTTP} from '@ionic-native/http';
+import {NavController, NavParams, AlertController, ViewController} from 'ionic-angular';
+import {Http} from '@angular/http';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 import {PROXY} from '../../providers/constants/constants';
 import {LinedetailPage} from '../../pages/linedetail/linedetail';
+import {OrbsPage} from '../../pages/orbs/orbs';
 
 @Component({
     selector: 'page-stackdetail',
@@ -22,49 +25,52 @@ export class StackdetailPage {
         timestamp: '',        
     }
     lines = [];
-
-    constructor(private alertCtrl: AlertController, private http: HTTP, public navCtrl: NavController, public navParams: NavParams) {
+    mostrar = false;
+    constructor(private alertCtrl: AlertController, private viewCtrl:ViewController, private http: Http, public navCtrl: NavController, public navParams: NavParams) {
 
         let self = this;
         let auth = this.navParams.get('item');
 
-        self.http.setDataSerializer('json');
-        self.http.post(PROXY + '/stack_detail.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-            .then(data => {
+        self.http.post(PROXY + '/stack_detail.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+            data => {//
+            var tmp = data;
+            //self.mensaje += JSON.stringify(tmp);
+            //self.mensaje += JSON.stringify(tmp[0]);
+            self.stack = tmp[0];//JSON.parse(data.data[0]);
+
+            self.http.post(PROXY + '/lines.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
+                data => {//
+                    var a = 70;
+                    self.cargar = false;
+                    var lines = data;
+                    for (var key in lines) {
+                        self.lines.push({
+                            id: lines[key].id,
+                            title: lines[key].title,
+                            description: lines[key].description,
+                            timestamp:  new Date(lines[key].timestamp).toDateString(),   
+                            clase: 'stack_full',
+                            px:a+'px'
+                        });
+                        a = a +40;
+                    }
+                    while(self.lines.length < 8){
+                        self.lines.push({title: '', timestamp: '', description: '', clase: 'stack_none', px:a+'px'});
+                        a = a +40;
+                    }                    
+                },
+                err => {
+                    self.presentAlert('Error!', JSON.stringify(err));
+                    self.cargar = false;
+                }
+            ); 
+
+            },
+            err => {
+                self.presentAlert('Error!', JSON.stringify(err));
                 self.cargar = false;
-                var tmp = JSON.parse(data.data);
-                //self.mensaje += JSON.stringify(tmp);
-                //self.mensaje += JSON.stringify(tmp[0]);
-                self.stack = tmp[0];//JSON.parse(data.data[0]);
-                self.http.post(PROXY + '/lines.php', btoa(JSON.stringify(auth)), {'Content-Type': 'application/json;charset=UTF-8'})
-                    .then(data => {
-                        self.cargar = false;
-                        var tmp = JSON.parse(data.data);
-                        //self.mensaje += pru[0].id;
-                        self.stack = tmp[0];//JSON.parse(data.data[0]);
-
-                        var lines = JSON.parse(data.data);
-                        for (var key in lines) {
-                            self.lines.push({
-                                id: lines[key].id,
-                                title: lines[key].title,
-                                description: lines[key].description,
-                                timestamp:  new Date(lines[key].timestamp).toDateString(),                               
-                            });
-                        }
-
-                    })
-                    .catch(error => {
-
-                        self.presentAlert('Error!', JSON.stringify(error));
-                        self.cargar = false;
-                    });
-            })
-            .catch(error => {
-
-                self.presentAlert('Error!', JSON.stringify(error));
-                self.cargar = false;
-            });
+            }
+        );
     }
 
     ionViewDidLoad() {
@@ -83,5 +89,22 @@ export class StackdetailPage {
     openLine(line){
         
         this.navCtrl.push(LinedetailPage, {line:line});
+    }
+    collapse(){
+        var i = 0;
+        var self = this;
+        var clock = setInterval(function(){            
+            if (self.lines.length == i){
+                clearInterval(clock);
+                self.viewCtrl.dismiss();
+            }else{
+                self.lines[i].clase = self.lines[i].clase + ' itemSlidingAnimation';
+                i = i + 1;
+            }            
+        },500);
+    }
+    
+    goToOrbs(){
+         this.navCtrl.push(OrbsPage);
     }
 }
