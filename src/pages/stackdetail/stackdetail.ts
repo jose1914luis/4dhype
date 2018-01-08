@@ -40,7 +40,7 @@ export class StackdetailPage {
 
             self.http.post(PROXY + '/lines.php', btoa(JSON.stringify(auth))).map(res => res.json()).subscribe(
                 data => {//
-                    var a = 70;
+                    var a = 150;
                     self.cargar = false;
                     var lines = data;
                     for (var key in lines) {

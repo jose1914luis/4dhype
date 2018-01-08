@@ -1,18 +1,46 @@
-<!--
-  Generated template for the FriendPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Friend</ion-title>
-  </ion-navbar>
-
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Users Browsed With</ion-title>
+    </ion-navbar>
 </ion-header>
 
+<ion-content>
+    <div>{{mensaje}}</div>
 
-<ion-content padding>
+    <div *ngIf="cargar" style="text-align: center">
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+
+    <br>
+    <ion-grid>      
+      <ion-row style='background: gray;border: think solid black;'>
+        <ion-col col-3>
+            <h3><b>S/No.</b></h3>
+        </ion-col>
+        <ion-col col-6>
+                <h3><b>User</b></h3>
+                <p><b>Browse on Orb</b></p>
+        </ion-col> 
+          <ion-col col-3>
+                <h3><b>Date</b></h3>
+        </ion-col>
+       </ion-row>
+       <ion-row *ngFor="let item of items; let i = index" (click)="ejecute(item)">
+        <ion-col col-3>
+            <h3>{{i+1}}</h3>
+        </ion-col>
+        <ion-col col-6>
+            <h3>{{item.first_name}} {{item.last_name}}</h3>
+            <p>{{item.stack_title}}</p>
+        </ion-col> 
+           <ion-col col-3>
+            <h3>{{item.browse_date}}</h3>
+        </ion-col>
+       </ion-row>
+    </ion-grid>
+
 
 </ion-content>

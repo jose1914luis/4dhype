@@ -15,6 +15,7 @@ import {FriendPage} from '../pages/friend/friend';
 import {RecallsPage} from '../pages/recalls/recalls';
 import {OrbsPage} from '../pages/orbs/orbs';
 import {Wizard1Page} from '../pages/wizard1/wizard1';
+import {UserPage} from '../pages/user/user';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -41,7 +42,8 @@ import { SceneGraph } from '../components/scenegraph/scenegraph';
         FriendPage,
         OrbsPage,
         Wizard1Page,
-        SceneGraph
+        SceneGraph,
+        UserPage
     ],
     imports: [
         HttpModule,
@@ -63,7 +65,8 @@ import { SceneGraph } from '../components/scenegraph/scenegraph';
         LinedetailPage,
         FriendPage,
         OrbsPage,
-        Wizard1Page
+        Wizard1Page,
+        UserPage
     ],
     providers: [
         Camera,

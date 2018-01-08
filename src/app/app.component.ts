@@ -10,7 +10,7 @@ import {ListPage} from '../pages/list/list';
 import {PanelPage} from '../pages/panel/panel';
 import {RecallsPage} from '../pages/recalls/recalls';
 
-import {OrbsPage} from '../pages/orbs/orbs';
+import {FriendPage} from '../pages/friend/friend';
 //import * as textAgular from 'textangular';
 
 
@@ -31,9 +31,10 @@ export class MyApp {
         // used for an example of ngFor and navigation
         this.pages = [
             {title: 'Home', component: PanelPage},
-            {title: 'My Profile', component: ListPage},            
+            {title: 'My Profile', component: ListPage},
+            {title: 'Users Browsed With', component: FriendPage},
             {title: 'Unpublished Stacks', component: UnpublisPage},
-            {title: 'My Recalls', component: RecallsPage},            
+            {title: 'My Recalls', component: RecallsPage},
             {title: 'Logout', component: LoginPage}
         ];
 

@@ -18,19 +18,19 @@
     <ion-grid>      
       <ion-row style='background: gray;border: think solid black;'>
         <ion-col col-3>
-            <h2><b>S/No.</b></h2>
+            <h3><b>S/No.</b></h3>
         </ion-col>
         <ion-col col-8>
-                <h2><b>Title</b></h2>
+                <h3><b>Title</b></h3>
                 <p><b>Date Added</b></p>
         </ion-col>        
        </ion-row>
        <ion-row *ngFor="let item of items; let i = index" (click)="ejecute(item)">
         <ion-col col-3>
-            <h2>{{i+1}}</h2>
+            <h3>{{i+1}}</h3>
         </ion-col>
         <ion-col col-8>
-            <h2>{{item.stack_title}}</h2>
+            <h3>{{item.stack_title}}</h3>
             <p>{{item.timestamp}}</p>
         </ion-col>       
        </ion-row>

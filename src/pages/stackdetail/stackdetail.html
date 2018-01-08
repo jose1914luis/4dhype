@@ -10,17 +10,18 @@
 
 <ion-content padding>
 
-    <h2>{{stack.stack_title}}</h2>
+    <h3>{{stack.stack_title}}</h3>
     <div>{{mensaje}}</div>
 
     <div *ngIf="cargar" text-center>
         <ion-spinner icon="lines"></ion-spinner>
     </div>
 
+    
     <div *ngFor="let line of lines">
         <div class="{{line.clase}}" [style.top]="line.px"> {{line.px}}</div>
     </div>  
-    <div style="height: 350px"></div>
+    <div style="height: 400px"></div>
     <div text-center >
         <button color="light" ion-button type="button" (click)="collapse()">
             Collapse
