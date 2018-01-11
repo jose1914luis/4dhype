@@ -22,6 +22,13 @@ var pai_forward_speed = 12;
 var pai_cam_rotating = false;
 var pai_cam_direction = null;
 
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+var vector;
+var travelingPos;
+var planet;
+var pai_z_pos1 = 60;
+
 @Component({
     selector: 'scenegraph',
     template: '<div style="width:100%; height:100%"></div>'
@@ -39,14 +46,36 @@ export class SceneGraph {
     }
 
     ngAfterViewInit() {
-        
+
 
         var HEIGHT = window.innerHeight;
         var WIDTH = window.innerWidth;
 
         camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.5, 2000);
         camera.position.z = 100;
-        console.log(camera);
+        //        console.log(camera);
+
+        // Light
+        var globalLight = new THREE.HemisphereLight(0x2ECC71, 0x2ECC71, 0.5);
+        scene.add(globalLight);
+
+        var ambientLight = new THREE.AmbientLight(0x663344, 2);
+        scene.add(ambientLight);
+
+        var light = new THREE.DirectionalLight(0xffffff, 1.5);
+        light.position.set(200, 100, 200);
+        light.castShadow = true;
+        light.shadow.camera.left = -400;
+        light.shadow.camera.right = 400;
+        light.shadow.camera.top = 400;
+        light.shadow.camera.bottom = -400;
+        light.shadow.camera.near = 1;
+        light.shadow.camera.far = 1000;
+        light.shadow.mapSize.width = 2048;
+        light.shadow.mapSize.height = 2048;
+        scene.add(light);
+
+
 
 
         var prevX = 0;
@@ -117,8 +146,8 @@ export class SceneGraph {
 
         this.Points = new THREE.Points(particles, pMaterial);
         //Points.sortParticles = true;
-        scene.add(this.Points);                
-        
+        scene.add(this.Points);
+
         // Controls
         controls = new FlyControls(renderer.domElement);
         //this.controls.domElement = container;
@@ -126,9 +155,9 @@ export class SceneGraph {
         controls.rollSpeed = 0.1;
         controls.autoForward = false;
         controls.dragToLook = false;
-        
+
         this.sceneGraphElement.nativeElement.childNodes[0].appendChild(renderer.domElement);
-        
+
         clock.start();
     }
 
@@ -461,14 +490,19 @@ class FlyControls {
     raycaster = new THREE.Raycaster();
     pai_rot_speed = new THREE.Vector3(0, 0, 0);
 
+    onDocumentMouseDown;
+
     constructor(domElement) {
-        
+
         camera = camera;
-        
+
         this.object = camera;
 
         this.domElement = (domElement !== undefined) ? domElement : document;
         if (domElement) this.domElement.setAttribute('tabindex', - 1);
+
+        //add events
+        document.addEventListener('click', this.onDocumentMouseDown, false);
 
         // API
 
@@ -491,7 +525,7 @@ class FlyControls {
         this.rotationVector = new THREE.Vector3(0, 0, 0);
         this.targetRotationVector = new THREE.Vector3(0, 0, 0);
         this.dRotationVector = new THREE.Vector3(0, 0, 0);
-        
+
         this.direction = new THREE.Vector3(0, 0, -1);
         this.targetDirection = new THREE.Vector3(0, 0, -1);
         this.upVector = new THREE.Vector3(0, 1, 0);
@@ -508,17 +542,88 @@ class FlyControls {
 
         };
 
+        this.onDocumentMouseDown = function (event) {
+            //            if (!parRot) {
+            //                window.location = blue.object.url;
+            //            }
+
+            //			if(event.type != undefined) {
+            //				event.preventDefault();				
+            //			}
+
+            console.log(veces);
+            if (veces == 0) {
+                mouse.x = event.clientX / renderer.domElement.clientWidth * 2 - 1;
+                mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+                vector = new THREE.Vector3();
+                vector.set(-mouse.x, -mouse.y, 0.5);
+
+                vector.unproject(camera);
+                var dir = vector.sub(camera.position).normalize();
+                var distance = 0;
+                // Don't delete the following line, keep it commented.
+                // verA = camera.position.clone().add(dir.multiplyScalar(distance));
+
+                raycaster.setFromCamera(mouse, camera);
+                var intersects = raycaster.intersectObjects(scene.children);
+
+                // If intersection not available and page redirected from stack page, then create a custom intersection.
+                //				if(intersects.length <= 0 && event.type == undefined) {
+                //					intersects = [
+                //						{
+                //							'object' : {
+                //								'position' : {
+                //									'x' : event.clientX,
+                //									'y' : event.clientY,
+                //									'z' : event.clientZ
+                //								}
+                //							}
+                //						}
+                //					];
+                //				}
+
+                console.log(intersects.length);
+                if (intersects.length > 0) {
+                    //if (intersects.length < 0) { // truepai
+                    var obj3 = saturn.filter(function (x) {
+                        if (x.x == intersects[0].object.position.x && x.y == intersects[0].object.position.y) {
+                            return x;
+                        }
+                    });
+
+                    if (obj3[0] == undefined) {
+                        controls.rollSpeed = 0.1;
+                    }
+
+                    if (obj3[0] != undefined) {
+                        controls.rollSpeed = 0;
+                        travelingPos = obj3[0].mesh.position;
+                        obj3[0].addRing(scene);
+                        planet = obj3[0];
+                        // Update current planet
+                        //                        $("#current_planet").val(planet.id);
+                        inOrb = true;
+
+                        camera.position.set(travelingPos.x, travelingPos.y, travelingPos.z + pai_z_pos1);
+                        camera.rotation.set(0, 0, 0);
+                        //obj3[0].mesh.position.set(0, 0, pai_z_pos1);
+                    }
+                }
+            }
+        }
+
         this.update = function (delta) {
 
             //console.log('moviendo');
-                        
+
             var dx = (this.targetDirection.x - this.direction.x) / pai_rot_num;
             var dy = (this.targetDirection.y - this.direction.y) / pai_rot_num;
             var dz = (this.targetDirection.z - this.direction.z) / pai_rot_num;
-            
+
             //console.log(delta);
-//            console.log(dy);
-//            console.log(dz);
+            //            console.log(dy);
+            //            console.log(dz);
 
             if (Math.abs(this.targetDirection.x - this.direction.x) <= Math.abs(this.pai_rot_speed.x * delta)
                 && Math.abs(this.targetDirection.y - this.direction.y) <= Math.abs(this.pai_rot_speed.y * delta)

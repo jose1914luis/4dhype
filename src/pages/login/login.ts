@@ -14,7 +14,7 @@ import {Storage} from '@ionic/storage';
 export class LoginPage {
 
     mensaje = '';
-    loginData = {email: 'simpleraison@googlemail.com', password: 'testtest123', "autoLogin": true};
+    loginData = {email: 'test@gmail.com', password: 'a', "autoLogin": true};
     cargar = false;
     constructor(private alertCtrl: AlertController, private storage: Storage, private http: Http, public navCtrl: NavController, public navParams: NavParams) {
     }

@@ -17,21 +17,26 @@
         <ion-spinner icon="lines"></ion-spinner>
     </div>
 
-    
-    <div *ngFor="let line of lines" (click)="openLine(line)">
-        <div class="{{line.clase}}" [style.top]="line.px"> </div>
-    </div>  
-    <div style="height: 390px"></div>
-    <div text-center >
-        <button color="light" ion-button type="button" (click)="collapse()">
-            Collapse
-        </button>
-    </div> 
-    <br>
-    <div text-center >
-        <button color="secondary"  ion-button type="button" (click)="goToOrbs()">
-            Back to Orbs
-        </button>
+
+    <div text-center>
+        <div *ngFor="let line of lines; let i = index">
+            <div class="{{line.clase}}"  [style.top]="line.px+'px'">
+                {{line.px}}
+            </div>
+        </div> 
+
     </div>
+
+
+    <div style="height: 320px"></div>
+    <div text-center class="buttons">
+        <div id="button" (click)="collapse()" class="collapse">Collapse</div>
+    </div>
+    <br>
+    <div text-center class="btn btn-success" (click)="goToOrbs()">
+        <ion-icon name="ios-arrow-back"></ion-icon>
+        Back <br> to Orbs
+    </div>
+
 
 </ion-content>
